@@ -52,6 +52,12 @@ describe('parseGamesCsv', () => {
         });
     });
 
+    it('parses CSV content that starts with a UTF-8 BOM', () => {
+        const rows = parseGamesCsv('\uFEFFTitle,Category,Publisher,Description\n"Game A","Strategy","Pub One","Desc A"');
+        expect(rows).toHaveLength(1);
+        expect(rows[0]?.title).toBe('Game A');
+    });
+
     it('skips rows without a title', () => {
         const rows = parseGamesCsv('Title,Category,Publisher,Description\n,,,');
         expect(rows).toHaveLength(0);

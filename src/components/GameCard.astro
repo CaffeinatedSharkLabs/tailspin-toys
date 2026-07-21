@@ -8,6 +8,10 @@ interface Props {
 }
 
 const { game } = Astro.props;
+const starRatingLabel = game.starRating === null ? 'No rating yet' : `${game.starRating} / 5`;
+const roundedStarRating = game.starRating === null ? 0 : Math.round(game.starRating);
+const filledStars = String.fromCodePoint(9733).repeat(roundedStarRating);
+const emptyStars = String.fromCodePoint(9734).repeat(5 - roundedStarRating);
 ---
 
 <a
@@ -38,6 +42,17 @@ const { game } = Astro.props;
             )}
 
             <p class="text-slate-400 mb-4 text-sm line-clamp-2" data-testid="game-description">{game.description}</p>
+            {game.starRating === null ? (
+                <p class="text-slate-300 text-sm mb-4" data-testid="game-star-rating">{starRatingLabel}</p>
+            ) : (
+                <p class="text-amber-400 text-sm mb-4 flex items-center gap-2" data-testid="game-star-rating" aria-label={starRatingLabel}>
+                    <span class="text-slate-300">{starRatingLabel}</span>
+                    <span>
+                        {filledStars}
+                        <span class="text-slate-500">{emptyStars}</span>
+                    </span>
+                </p>
+            )}
 
             <div class="mt-4 text-sm text-blue-400 font-medium flex items-center">
                 <span>View details</span>

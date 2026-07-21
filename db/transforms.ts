@@ -86,13 +86,13 @@ export function parseCsv(content: string): Record<string, string>[] {
 /** Parse the games seed CSV into typed rows. */
 export function parseGamesCsv(content: string): GameCsvRow[] {
     return parseCsv(content)
-        .filter((row) => (row.Title ?? '').trim().length > 0)
         .map((row) => ({
-            title: row.Title.trim(),
-            category: row.Category.trim(),
-            publisher: row.Publisher.trim(),
-            description: row.Description.trim(),
-        }));
+            title: (row.Title ?? row['\uFEFFTitle'] ?? '').trim(),
+            category: (row.Category ?? '').trim(),
+            publisher: (row.Publisher ?? '').trim(),
+            description: (row.Description ?? '').trim(),
+        }))
+        .filter((row) => row.title.length > 0);
 }
 
 export function categoryDescription(name: string): string {
